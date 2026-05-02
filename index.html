@@ -49,29 +49,43 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    window.db = getFirestore(app); // 設為 window.db 這樣 Console 就捉得到了
+    window.db = getFirestore(app);
 
-    // 原本的所有變數與函數定義照舊，這裡省略...
-    // 【請把原本 script 裡面除了 Firebase 初始化之外的所有代碼，全部貼在這裡！】
-
-    // 最後，確保執行一次連線測試：
-    console.log("Firebase 初始化成功，db 已掛載到 window.db");
-    
-    // 修改原本的 saveState 函數，加入 Firebase 同步：
-    window.originalSaveState = window.saveState; // 備份原有的函數
-    window.saveState = async function() {
-        window.originalSaveState(); // 執行原本存 localStorage 的邏輯
+    window.syncFirebase = async function() {
+        if (!window.state) return; // 確保 state 存在
         try {
             await setDoc(doc(window.db, "budget", "data"), {
                 expenses: window.state.expenses,
                 current: window.state.current,
                 budgets: window.state.budgets
             });
-            console.log("已同步至 Firebase");
+            console.log("Firebase 同步成功");
         } catch (e) {
             console.error("Firebase 同步失敗: ", e);
         }
     };
+
+    window.loadFromFirebase = async function() {
+        if (!window.state) return;
+        try {
+            const docSnap = await getDoc(doc(window.db, "budget", "data"));
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                window.state.expenses = data.expenses || [];
+                window.state.current = data.current || window.state.current;
+                window.state.budgets = data.budgets || window.state.budgets;
+                if(window.renderAll) window.renderAll();
+                console.log("Firebase 載入完成");
+            }
+        } catch (e) {
+            console.error("Firebase 讀取失敗: ", e);
+        }
+    };
+
+    // 等待網頁其他邏輯初始化完畢後，再讀取雲端
+    window.addEventListener('load', () => {
+        setTimeout(window.loadFromFirebase, 500); 
+    });
 </script>
 </body>
 </html>
