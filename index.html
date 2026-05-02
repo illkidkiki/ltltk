@@ -1,70 +1,188 @@
-<!DOCTYPE html>
-<html lang="zh-HK">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recurring Budget Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <style>
-        /* 你的 CSS 保持不變 */
-        :root{--bg:#FAFAFA;--surface:#ffffff;--surface2:#f5f5f5;--text:#3E3E3E;--muted:#7a7a7a;--divider:#e4e4e4;--primary:#8C6A4E;--success:#A7B6A2;--warning:#D9A066;--error:#a56a4a;--radius:18px;--shadow:0 10px 24px rgba(62,62,62,.08);--font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--title-font:"Noto Serif TC",Georgia,serif}*{box-sizing:border-box}body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}h1,h2{font-family:var(--title-font)}button,input,select{font:inherit}input,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--divider);background:var(--surface2);color:var(--text)}button{padding:12px 14px;border:none;border-radius:12px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--divider)}.app{display:grid;grid-template-columns:320px 1fr;min-height:100vh}.side,.panel,.card{background:var(--surface);border:1px solid var(--divider);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.side{padding:24px;border-right:1px solid var(--divider);display:grid;gap:16px}.main{padding:24px;display:grid;gap:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.metric-card{grid-column:span 3}.metric{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums}.muted{color:var(--muted)}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.chartbox{min-height:280px;background:var(--surface2);border-radius:16px;padding:12px}canvas{width:100%!important;height:240px!important}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid var(--divider);text-align:left;font-size:14px;vertical-align:top}th{color:var(--muted)}.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{display:inline-flex;padding:6px 10px;background:var(--surface2);border:1px solid var(--divider);border-radius:999px;font-size:13px}.stack{display:grid;gap:10px}.muted-box{background:var(--surface2);border:1px solid var(--divider);border-radius:14px;padding:14px}@media(max-width:1100px){.app{grid-template-columns:1fr}.metric-card{grid-column:span 6}.two{grid-template-columns:1fr}}@media(max-width:640px){.main,.side{padding:16px}.grid{grid-template-columns:1fr 1fr}.metric-card{grid-column:span 1}table{display:none}}
-    </style>
-</head>
-<body>
-    <!-- 你的 HTML 內容保持不變 -->
-    <div class="app"><aside class="side"><div><h1 style="margin:0 0 16px; font-size: 2.2rem; color: var(--primary); letter-spacing: -0.02em; border-bottom: 2px solid var(--primary); padding-bottom: 8px; display: inline-block;">Budget Tracker</h1></div><div class="card"><strong>雲端同步</strong><div id="lastSaved" class="muted" style="margin-top:8px;font-size:13px">尚未連線</div></div></aside><main class="main">
-        <!-- (這裡省略了原本的 HTML 結構，貼上你原本嗰啲就行) -->
-    </main></div>
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Recurring Budget Tracker</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script><style>:root{--bg:#FAFAFA;--surface:#ffffff;--surface2:#f5f5f5;--text:#3E3E3E;--muted:#7a7a7a;--divider:#e4e4e4;--primary:#8C6A4E;--success:#A7B6A2;--warning:#D9A066;--error:#a56a4a;--radius:18px;--shadow:0 10px 24px rgba(62,62,62,.08);--font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--title-font:"Noto Serif TC",Georgia,serif}*{box-sizing:border-box}body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}h1,h2{font-family:var(--title-font)}button,input,select{font:inherit}input,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--divider);background:var(--surface2);color:var(--text)}button{padding:12px 14px;border:none;border-radius:12px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--divider)}.app{display:grid;grid-template-columns:320px 1fr;min-height:100vh}.side,.panel,.card{background:var(--surface);border:1px solid var(--divider);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.side{padding:24px;border-right:1px solid var(--divider);display:grid;gap:16px}.main{padding:24px;display:grid;gap:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.metric-card{grid-column:span 3}.metric{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums}.muted{color:var(--muted)}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.chartbox{min-height:280px;background:var(--surface2);border-radius:16px;padding:12px}canvas{width:100%!important;height:240px!important}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid var(--divider);text-align:left;font-size:14px;vertical-align:top}th{color:var(--muted)}.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{display:inline-flex;padding:6px 10px;background:var(--surface2);border:1px solid var(--divider);border-radius:999px;font-size:13px}.stack{display:grid;gap:10px}.muted-box{background:var(--surface2);border:1px solid var(--divider);border-radius:14px;padding:14px}@media(max-width:1100px){.app{grid-template-columns:1fr}.metric-card{grid-column:span 6}.two{grid-template-columns:1fr}}@media(max-width:640px){.main,.side{padding:16px}.grid{grid-template-columns:1fr 1fr}.metric-card{grid-column:span 1}table{display:none}}</style></head><body><div class="app"><aside class="side"><div><h1 style="margin:0 0 16px; font-size: 2.2rem; color: var(--primary); letter-spacing: -0.02em; border-bottom: 2px solid var(--primary); padding-bottom: 8px; display: inline-block;">Budget Tracker</h1></div><div class="card"><strong>本機自動儲存</strong><div id="lastSaved" class="muted" style="margin-top:8px;font-size:13px">尚未儲存</div></div></aside><main class="main"><div class="panel"><h2 style="margin-top:0">新增支出</h2><div class="two"><div class="stack"><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px"><select id="yearSel"></select><select id="monthSel"></select><select id="dateSel"></select><select id="ownerSel"></select><select id="typeSel"></select><select id="categorySel"></select></div><div style="display:grid;grid-template-columns:1fr 180px auto;gap:10px"><input id="expenseName" placeholder="支出項目"><input id="expenseAmount" type="number" step="0.01" placeholder="金額"><button id="addExpenseBtn">加入支出</button></div><div class="pills" id="budgetPills"></div></div><div class="muted-box"><strong>選中 budget</strong><div id="selectedBudgetInfo" style="margin-top:8px;line-height:1.8"></div></div></div></div><div class="grid"><div class="card metric-card"><div class="muted">Budget</div><div class="metric" id="mBudget">HK$0</div></div><div class="card metric-card"><div class="muted">已用</div><div class="metric" id="mSpent">HK$0</div></div><div class="card metric-card"><div class="muted">剩餘</div><div class="metric" id="mRemain">HK$0</div></div><div class="card metric-card"><div class="muted">使用率</div><div class="metric" id="mRate">0%</div></div></div><div class="panel"><h2 style="margin-top:0">每個類別 budget</h2><div id="budgetTableWrap"></div></div>
+<div class="two">
+    <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 style="margin:0">分類支出圖表</h2>
+            <div>
+                <button class="secondary" onclick="changeChartMonth('category', -1)">＜</button>
+                <span id="categoryMonthLabel" style="margin:0 8px; font-weight:bold;">May</span>
+                <button class="secondary" onclick="changeChartMonth('category', 1)">＞</button>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:center"><div id="categoryLegend" class="stack"></div><div class="chartbox"><canvas id="categoryChart"></canvas></div></div>
+    </div>
+    <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 style="margin:0">每日支出圖表</h2>
+            <div>
+                <button class="secondary" onclick="changeChartMonth('daily', -1)">＜</button>
+                <span id="dailyMonthLabel" style="margin:0 8px; font-weight:bold;">May</span>
+                <button class="secondary" onclick="changeChartMonth('daily', 1)">＞</button>
+            </div>
+        </div>
+        <div class="chartbox"><canvas id="dailyChart"></canvas></div>
+    </div>
+</div>
+nel"><h2 style="margin-top:0">每日支出圖表</h2><div class="chartbox"><canvas id="dailyChart"></canvas></div></div></div><div class="panel"><h2 style="margin-top:0">支出列表</h2><div style="overflow:auto"><table><thead><tr><th>年份</th><th>日期</th><th>月份</th><th>負責人</th><th>預算分類</th><th>類別</th><th>項目</th><th>金額</th><th>Budget Key</th><th>操作</th></tr></thead><tbody id="expenseTableBody"></tbody></table></div></div></main></div><script>
+const TEMPLATE_ROWS = [{"owner": "Cleo", "type": "必需", "category": "租金", "budget": 22000.0}, {"owner": "Coco", "type": "必需", "category": "水電煤 寬頻", "budget": 1000.0}, {"owner": "Cleo", "type": "必需", "category": "家居保", "budget": 100.0}, {"owner": "Cleo", "type": "可調", "category": "Meal for two", "budget": 8400.0}, {"owner": "Cleo", "type": "可調", "category": "Supplement", "budget": 1800.0}, {"owner": "Coco", "type": "可調", "category": "運動", "budget": 5200.0}, {"owner": "Cleo", "type": "可調", "category": "娛樂消遣", "budget": 1000.0}, {"owner": "Cleo", "type": "可調", "category": "零食飲品", "budget": 1500.0}, {"owner": "Cleo", "type": "可調", "category": "個人護理/家居清潔", "budget": 500.0}, {"owner": "Cleo", "type": "可調", "category": "家電/耗損品", "budget": 500.0}, {"owner": "Cleo", "type": "必需", "category": "Jelly", "budget": 800.0}, {"owner": "Cleo", "type": "必需", "category": "Mobile", "budget": 404.0}, {"owner": "Cleo", "type": "必需", "category": "Monthly subscription", "budget": 100.0}, {"owner": "Coco", "type": "必需", "category": "家用", "budget": 500.0}, {"owner": "Coco", "type": "可調", "category": "Meal for own", "budget": 3000.0}, {"owner": "Coco", "type": "可調", "category": "Transport", "budget": 750.0}, {"owner": "Coco", "type": "可調", "category": "Beauty", "budget": 500.0}, {"owner": "Coco", "type": "可調", "category": "Shopping娛樂消遣", "budget": 1500.0}, {"owner": "Coco", "type": "可調", "category": "Medical", "budget": 1000.0}, {"owner": "Coco", "type": "必需", "category": "Household Items", "budget": 6200.0}, {"owner": "Coco", "type": "必需", "category": "Exam", "budget": 4000.0}, {"owner": "Coco", "type": "必需", "category": "Insurance儲備", "budget": 2200.0}, {"owner": "Coco", "type": "必需", "category": "Tax儲備", "budget": 3500.0}, {"owner": "Coco", "type": "必需", "category": "Loan", "budget": 9500.0}, {"owner": "Coco", "type": "必需", "category": "MPF", "budget": 1500.0}, {"owner": "Cleo", "type": "必需", "category": "家用", "budget": 4000.0}, {"owner": "Cleo", "type": "可調", "category": "Meal for own", "budget": 3000.0}, {"owner": "Cleo", "type": "可調", "category": "Coffee", "budget": 300.0}, {"owner": "Cleo", "type": "可調", "category": "Shopping娛樂消遣", "budget": 1500.0}, {"owner": "Cleo", "type": "可調", "category": "Haircut", "budget": 200.0}, {"owner": "Cleo", "type": "可調", "category": "Medical", "budget": 100.0}, {"owner": "Cleo", "type": "可調", "category": "Transport", "budget": 100.0}, {"owner": "Cleo", "type": "必需", "category": "Household Items", "budget": 37104.0}, {"owner": "Cleo", "type": "必需", "category": "Tax儲備", "budget": 12000.0}, {"owner": "Cleo", "type": "必需", "category": "Insurance儲備", "budget": 7500.0}, {"owner": "Cleo", "type": "必需", "category": "Provident Fund", "budget": 2800.0}, {"owner": "Cleo", "type": "必需", "category": "MCU", "budget": 1000.0}];
+const YEARS = [2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTH_DAYS = {Jan:31,Feb:28,Mar:31,Apr:30,May:31,Jun:30,Jul:31,Aug:31,Sep:30,Oct:31,Nov:30,Dec:31};
+const STORAGE_KEY='budget-tracker-recurring-v6';
+const fmt=new Intl.NumberFormat('en-HK',{style:'currency',currency:'HKD',maximumFractionDigits:2});
+const qs=id=>document.getElementById(id);
+const money=v=>fmt.format(Number(v||0));
+function uniq(a){return [...new Set(a.filter(Boolean))]}
+function daysForMonth(m,y){let d=MONTH_DAYS[m]||31; if(m==='Feb'){const yy=Number(y||2026); d=((yy%4===0 && yy%100!==0)||yy%400===0)?29:28;} return Array.from({length:d}, (_,i)=>String(i+1).padStart(2,'0'));}
+const state={budgets:MONTHS.flatMap(m=>TEMPLATE_ROWS.map(r=>({month:m, owner:r.owner, type:r.type, category:r.category, budget:r.budget}))), expenses:[], current:{year:'2026', month:'May', date:'01', owner:'Cleo', type:'必需', category:'租金'}};
+let categoryChart, dailyChart;
+function saveState(){localStorage.setItem(STORAGE_KEY, JSON.stringify({expenses:state.expenses, current:state.current, lastSaved:new Date().toISOString()})); qs('lastSaved').textContent='最近儲存：'+new Date().toLocaleString('zh-HK')
+                    if(window.syncFirebase) window.syncFirebase();}
+function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return; const x=JSON.parse(raw); state.expenses=x.expenses||[]; state.current={...state.current, ...(x.current||{})}; if(x.lastSaved) qs('lastSaved').textContent='最近儲存：'+new Date(x.lastSaved).toLocaleString('zh-HK')}catch(e){}}
+function fillSelect(id, values, selected){const e=qs(id); e.innerHTML=''; values.forEach(v=>{const o=document.createElement('option'); o.value=String(v); o.textContent=String(v); e.appendChild(o)}); if(selected!==undefined && selected!==null && selected!=='') e.value=String(selected); else if(values.length) e.value=String(values[0]);}
+function initSelectors(){fillSelect('yearSel', YEARS.map(String), state.current.year); fillSelect('monthSel', MONTHS, state.current.month); fillSelect('dateSel', daysForMonth(state.current.month, state.current.year), state.current.date); const owners=uniq(state.budgets.map(x=>x.owner)); fillSelect('ownerSel', owners, state.current.owner); const types=uniq(state.budgets.filter(x=>x.owner===state.current.owner && x.month===state.current.month).map(x=>x.type)); fillSelect('typeSel', types, state.current.type); const cats=uniq(state.budgets.filter(x=>x.owner===state.current.owner && x.month===state.current.month && x.type===state.current.type).map(x=>x.category)); fillSelect('categorySel', cats, state.current.category);}
 
-    <!-- 這是合併後的 JS -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+function refreshSelectors(triggerId){
+    state.current.year = qs('yearSel').value;
+    state.current.month = qs('monthSel').value;
+    state.current.date = qs('dateSel').value;
 
-        // 1. Firebase 初始化
-        const firebaseConfig = { apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA", authDomain: "budget-tracker-5719f.firebaseapp.com", projectId: "budget-tracker-5719f", storageBucket: "budget-tracker-5719f.firebasestorage.app", messagingSenderId: "304444847886", appId: "1:304444847886:web:671050f5eb75eb50e9c95f", measurementId: "G-Y0E3S3YBRS" };
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
+    if(triggerId !== 'typeSel' && triggerId !== 'categorySel') state.current.owner = qs('ownerSel').value;
+    if(triggerId !== 'categorySel') state.current.type = qs('typeSel').value;
+    state.current.category = qs('categorySel').value;
 
-        // 2. 你的原有 JS 變數定義 (貼喺下面)
-        // ... (貼入你原本嗰堆 const TEMPLATE_ROWS, YEARS, etc.) ...
-        
-        // 3. 整合儲存函數
-        const originalSaveState = window.saveState;
-        window.saveState = async function() {
-            if(originalSaveState) originalSaveState();
-            try {
-                await setDoc(doc(window.db, "budget", "data"), {
-                    expenses: state.expenses,
-                    current: state.current,
-                    budgets: state.budgets
-                });
-                document.getElementById('lastSaved').textContent = '已同步雲端：' + new Date().toLocaleTimeString();
-            } catch (e) { console.error(e); }
-        };
+    const owners = uniq(state.budgets.map(x=>x.owner));
+    if(!owners.includes(state.current.owner)) state.current.owner = owners[0];
 
-        // 4. 整合載入函數
-        async function loadFirebase() {
-            try {
-                const docSnap = await getDoc(doc(window.db, "budget", "data"));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    state.expenses = data.expenses;
-                    state.current = data.current;
-                    renderAll();
-                    console.log("Firebase 載入成功");
-                }
-            } catch (e) { console.error(e); }
+    const types = uniq(state.budgets.filter(x=>x.owner===state.current.owner && x.month===state.current.month).map(x=>x.type));
+    if(!types.includes(state.current.type)) state.current.type = types[0];
+
+    const cats = uniq(state.budgets.filter(x=>x.owner===state.current.owner && x.month===state.current.month && x.type===state.current.type).map(x=>x.category));
+    if(!cats.includes(state.current.category)) state.current.category = cats[0];
+
+    fillSelect('ownerSel', owners, state.current.owner);
+    fillSelect('typeSel', types, state.current.type);
+    fillSelect('categorySel', cats, state.current.category);
+    fillSelect('dateSel', daysForMonth(state.current.month, state.current.year), state.current.date);
+
+    qs('yearSel').value = state.current.year;
+    qs('monthSel').value = state.current.month;
+    updatePreview();
+}
+
+function monthBudgets(){return state.budgets.filter(x=>x.owner===state.current.owner && x.month===state.current.month)}
+function currentMonthBudget(){return monthBudgets().reduce((s,r)=>s+r.budget,0)}
+function currentMonthSpent(){return state.expenses.filter(e=>e.year===state.current.year && e.month===state.current.month).reduce((s,e)=>s+e.amount,0)}
+function monthSpentTotals(){const t={}; state.expenses.filter(e=>e.year===state.current.year && e.month===state.current.month).forEach(e=>{t[e.category]=(t[e.category]||0)+e.amount}); return t}
+function daySpentTotals(){const t={}; state.expenses.filter(e=>e.year===state.current.year && e.month===state.current.month).forEach(e=>{t[e.date]=(t[e.date]||0)+e.amount}); return Object.entries(t).sort((a,b)=>a[0].localeCompare(b[0]))}
+function renderTop(){const budget=currentMonthBudget(); const spent=currentMonthSpent(); const remain=budget-spent; const rate=budget?spent/budget*100:0; qs('mBudget').textContent=money(budget); qs('mSpent').textContent=money(spent); qs('mRemain').textContent=money(remain); qs('mRate').textContent=`${rate.toFixed(1)}%`; qs('selectedBudgetInfo').innerHTML=`<div><strong>年份：</strong>${state.current.year}</div><div><strong>月份：</strong>${state.current.month}</div><div><strong>日期：</strong>${state.current.date}</div><div><strong>總 Budget：</strong>${money(budget)}</div><div><strong>總已用：</strong>${money(spent)}</div><div><strong>總剩餘：</strong>${money(remain)}</div><div><strong>使用率：</strong>${rate.toFixed(1)}%</div>`; qs('budgetPills').innerHTML=`<span class="pill">年份：${state.current.year}</span><span class="pill">月份：${state.current.month}</span><span class="pill">日期：${state.current.date}</span>`}
+function renderBudgetTable(){const rows=monthBudgets().sort((a,b)=>a.owner.localeCompare(b.owner)||a.type.localeCompare(b.type)||a.category.localeCompare(b.category)); const total=rows.reduce((s,r)=>s+r.budget,0); qs('budgetTableWrap').innerHTML=`<div style="margin-bottom:12px"><span class="pill">月份：${state.current.month}</span><span class="pill">總 budget：${money(total)}</span></div><table><thead><tr><th>負責人</th><th>預算分類</th><th>類別</th><th>每月預算</th><th>已用</th><th>剩餘</th><th>使用率</th></tr></thead><tbody>${rows.map(r=>{const spent=state.expenses.filter(e=>e.year===state.current.year&&e.month===r.month&&e.owner===r.owner&&e.type===r.type&&e.category===r.category).reduce((s,e)=>s+e.amount,0); const remain=r.budget-spent; const rate=r.budget?spent/r.budget*100:0; const color=rate<=50?'#A7B6A2':rate<=75?'#D9A066':rate<=90?'#B58B6A':'#a56a4a'; return `<tr><td>${r.owner}</td><td>${r.type}</td><td>${r.category}</td><td>${money(r.budget)}</td><td>${money(spent)}</td><td>${money(remain)}</td><td><div style="min-width:180px"><div style="height:10px;background:#eee;border-radius:999px;overflow:hidden"><div style="width:${Math.min(rate,100)}%;height:100%;background:${color}"></div></div><div class="muted" style="margin-top:6px">${rate.toFixed(1)}%</div></div></td></tr>`}).join('')}</tbody></table>`}
+function renderExpenses(){qs('expenseTableBody').innerHTML=[...state.expenses].sort((a,b)=>b.createdAt-a.createdAt).map(e=>`<tr><td>${e.year||''}</td><td>${e.date||''}</td><td>${e.month}</td><td>${e.owner}</td><td>${e.type}</td><td>${e.category}</td><td>${e.name}</td><td>${money(e.amount)}</td><td>${e.key}</td><td><button class='secondary' onclick="editExpense('${e.id}')">修改</button><button class='secondary' onclick="deleteExpense('${e.id}')" style="margin-left:5px;color:var(--error)">刪除</button></td></tr>`).join('')}
+
+const chartMonths = { category: 'May', daily: 'May' };
+const MONTH_LIST = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function changeChartMonth(type, delta) {
+    let idx = MONTH_LIST.indexOf(chartMonths[type]);
+    idx = (idx + delta + 12) % 12;
+    chartMonths[type] = MONTH_LIST[idx];
+    qs(type + 'MonthLabel').textContent = chartMonths[type];
+    renderCharts();
+}
+
+// 修改 renderCharts 函數來讀取 chartMonths 的值
+// 將原本 renderCharts 中所有 monthSpentTotals() 和 daySpentTotals() 改為傳入對應的月份
+
+
+function renderCharts(){
+    if(typeof Chart==='undefined') return;
+    const palette=['#8C6A4E','#A7B6A2','#D9A066','#B58B6A','#9EAC98','#7F6B5E'];
+    if(categoryChart) categoryChart.destroy();
+    if(dailyChart) dailyChart.destroy();
+
+    // Category Chart
+    const cMonth = chartMonths.category;
+    const cData = state.expenses.filter(e=>e.year===state.current.year && e.month===cMonth);
+    const cTotals = {}; cData.forEach(e=>{cTotals[e.category]=(cTotals[e.category]||0)+e.amount});
+    const cEntries = Object.entries(cTotals).sort((a,b)=>b[1]-a[1]);
+    const total = cEntries.reduce((s,x)=>s+x[1],0)||1;
+
+    categoryChart = new Chart(qs('categoryChart'),{
+        type:'pie',
+        data:{
+            labels:cEntries.length?cEntries.map(x=>x[0]):['未有資料'],
+            datasets:[{data:cEntries.length?cEntries.map(x=>x[1]):[1],backgroundColor:palette,borderWidth:0}]
+        },
+        options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(ctx)=>ctx.label+': '+money(ctx.parsed)+' ('+(ctx.parsed/total*100).toFixed(1)+'%)'}}}}
+    });
+
+    const legend = qs('categoryLegend');
+    legend.innerHTML = cEntries.map((x,i)=>`<div class='pill'><span style='width:10px;height:10px;border-radius:50%;background:${palette[i%palette.length]}'></span> ${x[0]} <strong>${(x[1]/total*100).toFixed(1)}%</strong></div>`).join('');
+
+    // Daily Chart
+    const dMonth = chartMonths.daily;
+    const dData = state.expenses.filter(e=>e.year===state.current.year && e.month===dMonth);
+    const dTotals = {}; dData.forEach(e=>{dTotals[e.date]=(dTotals[e.date]||0)+e.amount});
+    const dEntries = Object.entries(dTotals).sort((a,b)=>a[0].localeCompare(b[0]));
+
+    dailyChart = new Chart(qs('dailyChart'),{
+        type:'bar',
+        data:{
+            labels:dEntries.length?dEntries.map(x=>x[0].slice(8)):['--'],
+            datasets:[{data:dEntries.length?dEntries.map(x=>x[1]):[0],backgroundColor:palette[0],borderRadius:4}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+    });
+}
+function renderAll(){renderTop(); renderBudgetTable(); renderCharts(); renderExpenses(); updatePreview(); saveState()}
+function updatePreview(){
+    const owner=qs('ownerSel').value||state.current.owner;
+    const type=qs('typeSel').value||state.current.type;
+    const category=qs('categorySel').value||state.current.category;
+    const row=state.budgets.find(b=>b.month===state.current.month && b.owner===owner && b.type===type && b.category===category);
+    qs('selectedBudgetInfo').innerHTML=row?`<div><strong>年份：</strong>${state.current.year}</div><div><strong>月份：</strong>${state.current.month}</div><div><strong>日期：</strong>${state.current.date}</div><div><strong>預計落點：</strong>${owner} / ${type} / ${category}</div><div><strong>Budget Key：</strong>${state.current.year}|${state.current.month}|${owner}|${type}|${category}</div><div><strong>類別 Budget：</strong>${money(row.budget)}</div>`:`<div><strong>年份：</strong>${state.current.year}</div><div><strong>月份：</strong>${state.current.month}</div><div><strong>日期：</strong>${state.current.date}</div><div><strong>預計落點：</strong>${owner} / ${type} / ${category}</div><div><strong>Budget Key：</strong>${state.current.year}|${state.current.month}|${owner}|${type}|${category}</div><div class="muted">未搵到對應 budget</div>`;
+}
+
+function addExpense(){state.current.owner=qs('ownerSel').value||state.current.owner; state.current.type=qs('typeSel').value||state.current.type; state.current.category=qs('categorySel').value||state.current.category; const name=qs('expenseName').value.trim(); const amount=Number(qs('expenseAmount').value); if(!name||!Number.isFinite(amount)||amount<=0)return; const item={id:crypto.randomUUID(), year:state.current.year, month:state.current.month, date:`${state.current.year}-${state.current.month}-${state.current.date}`, owner:state.current.owner, type:state.current.type, category:state.current.category, name, amount, key:`${state.current.year}|${state.current.month}|${state.current.owner}|${state.current.type}|${state.current.category}`, createdAt:Date.now()}; state.expenses.unshift(item); qs('expenseName').value=''; qs('expenseAmount').value=''; renderAll()}
+
+function deleteExpense(id){
+    if(confirm('確定要刪除這筆支出嗎？')){
+        state.expenses = state.expenses.filter(e => e.id !== id);
+        renderAll();
+    }
+}
+
+function editExpense(id){const item=state.expenses.find(x=>x.id===id); if(!item)return; const year=prompt('年份', item.year||state.current.year||2026); if(year===null)return; const month=prompt('月份', item.month); if(month===null)return; const date=prompt('日期 (DD)', (item.date||'').split('-').pop()||'01'); if(date===null)return; const owner=prompt('負責人', item.owner); if(owner===null)return; const type=prompt('預算分類', item.type); if(type===null)return; const category=prompt('類別', item.category); if(category===null)return; const name=prompt('支出項目', item.name); if(name===null)return; const amount=prompt('金額', item.amount); if(amount===null)return; const n=Number(amount); if(!Number.isFinite(n)||n<=0)return; item.year=String(year).trim(); item.month=month.trim(); item.date=`${String(year).trim()}-${month.trim()}-${String(date).padStart(2,'0')}`; item.owner=owner.trim(); item.type=type.trim(); item.category=category.trim(); item.name=name.trim(); item.amount=n; item.key=`${item.year}|${item.month}|${item.owner}|${item.type}|${item.category}`; renderAll()}
+initSelectors(); loadState(); refreshSelectors(); renderAll();
+['yearSel','monthSel','dateSel','ownerSel','typeSel','categorySel'].forEach(id=>qs(id).addEventListener('change',()=>refreshSelectors(id)));
+qs('addExpenseBtn').addEventListener('click',addExpense);
+</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA", authDomain: "budget-tracker-5719f.firebaseapp.com", projectId: "budget-tracker-5719f", storageBucket: "budget-tracker-5719f.firebasestorage.app", messagingSenderId: "304444847886", appId: "1:304444847886:web:671050f5eb75eb50e9c95f", measurementId: "G-Y0E3S3YBRS" };
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    window.syncFirebase = async () => {
+        try {
+            await setDoc(doc(db, "budget", "data"), { 
+                expenses: window.state.expenses, 
+                current: window.state.current, 
+                budgets: window.state.budgets 
+            });
+            const el = document.getElementById('lastSaved');
+            if(el) el.textContent = '已同步雲端：' + new Date().toLocaleTimeString();
+        } catch(e) { console.error(e); }
+    };
+
+    // 載入資料
+    getDoc(doc(db, "budget", "data")).then(docSnap => {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            window.state.expenses = data.expenses || [];
+            window.state.current = data.current || window.state.current;
+            window.renderAll();
         }
-        
-        // 5. 最後執行
-        window.addEventListener('load', () => {
-            loadState(); // 先讀 Local
-            loadFirebase(); // 再讀 Cloud
-        });
-    </script>
-</body>
-</html>
+    });
+</script></body></html>
