@@ -9,83 +9,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <style>
-        :root { --bg: #FAFAFA; --surface: #ffffff; --surface2: #f5f5f5; --text: #3E3E3E; --muted: #7a7a7a; --divider: #e4e4e4; --primary: #8C6A4E; --success: #A7B6A2; --warning: #D9A066; --error: #a56a4a; --radius: 18px; --shadow: 0 10px 24px rgba(62,62,62,.08); }
-        body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
-        .app { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
-        .side { padding: 24px; border-right: 1px solid var(--divider); background: var(--surface); }
-        .main { padding: 24px; display: grid; gap: 18px; }
-        .card { background: var(--surface); border: 1px solid var(--divider); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
-        .chartbox { min-height: 280px; background: var(--surface2); border-radius: 16px; padding: 12px; }
-        button { padding: 12px 14px; border: none; border-radius: 12px; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
-        button.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--divider); }
+        /* 你的 CSS 保持不變 */
+        :root{--bg:#FAFAFA;--surface:#ffffff;--surface2:#f5f5f5;--text:#3E3E3E;--muted:#7a7a7a;--divider:#e4e4e4;--primary:#8C6A4E;--success:#A7B6A2;--warning:#D9A066;--error:#a56a4a;--radius:18px;--shadow:0 10px 24px rgba(62,62,62,.08);--font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--title-font:"Noto Serif TC",Georgia,serif}*{box-sizing:border-box}body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}h1,h2{font-family:var(--title-font)}button,input,select{font:inherit}input,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--divider);background:var(--surface2);color:var(--text)}button{padding:12px 14px;border:none;border-radius:12px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--divider)}.app{display:grid;grid-template-columns:320px 1fr;min-height:100vh}.side,.panel,.card{background:var(--surface);border:1px solid var(--divider);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.side{padding:24px;border-right:1px solid var(--divider);display:grid;gap:16px}.main{padding:24px;display:grid;gap:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.metric-card{grid-column:span 3}.metric{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums}.muted{color:var(--muted)}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.chartbox{min-height:280px;background:var(--surface2);border-radius:16px;padding:12px}canvas{width:100%!important;height:240px!important}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid var(--divider);text-align:left;font-size:14px;vertical-align:top}th{color:var(--muted)}.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{display:inline-flex;padding:6px 10px;background:var(--surface2);border:1px solid var(--divider);border-radius:999px;font-size:13px}.stack{display:grid;gap:10px}.muted-box{background:var(--surface2);border:1px solid var(--divider);border-radius:14px;padding:14px}@media(max-width:1100px){.app{grid-template-columns:1fr}.metric-card{grid-column:span 6}.two{grid-template-columns:1fr}}@media(max-width:640px){.main,.side{padding:16px}.grid{grid-template-columns:1fr 1fr}.metric-card{grid-column:span 1}table{display:none}}
     </style>
 </head>
 <body>
-    <div class="app">
-        <aside class="side">
-            <h1>Budget Tracker</h1>
-            <div id="lastSaved" style="margin-top:8px; font-size:13px; color:var(--muted);"></div>
-        </aside>
-        <main class="main">
-            <!-- 你的原始表格和圖表內容保留在這裡 -->
-            <div id="categoryChartContainer" class="chartbox"><canvas id="categoryChart"></canvas></div>
-            <div id="dailyChartContainer" class="chartbox"><canvas id="dailyChart"></canvas></div>
-            <table id="expenseTable"><thead><tr><th>日期</th><th>類別</th><th>金額</th></tr></thead><tbody id="expenseTableBody"></tbody></table>
-        </main>
-    </div>
+    <!-- 你的 HTML 內容保持不變 -->
+    <div class="app"><aside class="side"><div><h1 style="margin:0 0 16px; font-size: 2.2rem; color: var(--primary); letter-spacing: -0.02em; border-bottom: 2px solid var(--primary); padding-bottom: 8px; display: inline-block;">Budget Tracker</h1></div><div class="card"><strong>雲端同步</strong><div id="lastSaved" class="muted" style="margin-top:8px;font-size:13px">尚未連線</div></div></aside><main class="main">
+        <!-- (這裡省略了原本的 HTML 結構，貼上你原本嗰啲就行) -->
+    </main></div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    <!-- 這是合併後的 JS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA",
-        authDomain: "budget-tracker-5719f.firebaseapp.com",
-        projectId: "budget-tracker-5719f",
-        storageBucket: "budget-tracker-5719f.firebasestorage.app",
-        messagingSenderId: "304444847886",
-        appId: "1:304444847886:web:671050f5eb75eb50e9c95f",
-        measurementId: "G-Y0E3S3YBRS"
-    };
+        // 1. Firebase 初始化
+        const firebaseConfig = { apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA", authDomain: "budget-tracker-5719f.firebaseapp.com", projectId: "budget-tracker-5719f", storageBucket: "budget-tracker-5719f.firebasestorage.app", messagingSenderId: "304444847886", appId: "1:304444847886:web:671050f5eb75eb50e9c95f", measurementId: "G-Y0E3S3YBRS" };
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    window.db = getFirestore(app);
+        // 2. 你的原有 JS 變數定義 (貼喺下面)
+        // ... (貼入你原本嗰堆 const TEMPLATE_ROWS, YEARS, etc.) ...
+        
+        // 3. 整合儲存函數
+        const originalSaveState = window.saveState;
+        window.saveState = async function() {
+            if(originalSaveState) originalSaveState();
+            try {
+                await setDoc(doc(window.db, "budget", "data"), {
+                    expenses: state.expenses,
+                    current: state.current,
+                    budgets: state.budgets
+                });
+                document.getElementById('lastSaved').textContent = '已同步雲端：' + new Date().toLocaleTimeString();
+            } catch (e) { console.error(e); }
+        };
 
-    window.syncFirebase = async function() {
-        if (!window.state) return; // 確保 state 存在
-        try {
-            await setDoc(doc(window.db, "budget", "data"), {
-                expenses: window.state.expenses,
-                current: window.state.current,
-                budgets: window.state.budgets
-            });
-            console.log("Firebase 同步成功");
-        } catch (e) {
-            console.error("Firebase 同步失敗: ", e);
+        // 4. 整合載入函數
+        async function loadFirebase() {
+            try {
+                const docSnap = await getDoc(doc(window.db, "budget", "data"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    state.expenses = data.expenses;
+                    state.current = data.current;
+                    renderAll();
+                    console.log("Firebase 載入成功");
+                }
+            } catch (e) { console.error(e); }
         }
-    };
-
-    window.loadFromFirebase = async function() {
-        if (!window.state) return;
-        try {
-            const docSnap = await getDoc(doc(window.db, "budget", "data"));
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                window.state.expenses = data.expenses || [];
-                window.state.current = data.current || window.state.current;
-                window.state.budgets = data.budgets || window.state.budgets;
-                if(window.renderAll) window.renderAll();
-                console.log("Firebase 載入完成");
-            }
-        } catch (e) {
-            console.error("Firebase 讀取失敗: ", e);
-        }
-    };
-
-    // 等待網頁其他邏輯初始化完畢後，再讀取雲端
-    window.addEventListener('load', () => {
-        setTimeout(window.loadFromFirebase, 500); 
-    });
-</script>
+        
+        // 5. 最後執行
+        window.addEventListener('load', () => {
+            loadState(); // 先讀 Local
+            loadFirebase(); // 再讀 Cloud
+        });
+    </script>
 </body>
 </html>
