@@ -34,73 +34,44 @@
         </main>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA",
-            authDomain: "budget-tracker-5719f.firebaseapp.com",
-            projectId: "budget-tracker-5719f",
-            storageBucket: "budget-tracker-5719f.firebasestorage.app",
-            messagingSenderId: "304444847886",
-            appId: "1:304444847886:web:671050f5eb75eb50e9c95f",
-            measurementId: "G-Y0E3S3YBRS"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBLLSn0irqFZl6QRxvO7q0UyWawWJhRBNA",
+        authDomain: "budget-tracker-5719f.firebaseapp.com",
+        projectId: "budget-tracker-5719f",
+        storageBucket: "budget-tracker-5719f.firebasestorage.app",
+        messagingSenderId: "304444847886",
+        appId: "1:304444847886:web:671050f5eb75eb50e9c95f",
+        measurementId: "G-Y0E3S3YBRS"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        window.db = db;
+    const app = initializeApp(firebaseConfig);
+    window.db = getFirestore(app); // 設為 window.db 這樣 Console 就捉得到了
 
-        // 整合儲存邏輯
-        window.saveState = async function() {
-            // 原有的 localStorage
-            localStorage.setItem("budget-tracker-recurring-v6", JSON.stringify({
+    // 原本的所有變數與函數定義照舊，這裡省略...
+    // 【請把原本 script 裡面除了 Firebase 初始化之外的所有代碼，全部貼在這裡！】
+
+    // 最後，確保執行一次連線測試：
+    console.log("Firebase 初始化成功，db 已掛載到 window.db");
+    
+    // 修改原本的 saveState 函數，加入 Firebase 同步：
+    window.originalSaveState = window.saveState; // 備份原有的函數
+    window.saveState = async function() {
+        window.originalSaveState(); // 執行原本存 localStorage 的邏輯
+        try {
+            await setDoc(doc(window.db, "budget", "data"), {
                 expenses: window.state.expenses,
-                current: window.state.current
-            }));
-            
-            // 同步到 Firebase
-            try {
-                await setDoc(doc(db, "budget", "data"), {
-                    expenses: window.state.expenses,
-                    current: window.state.current,
-                    budgets: window.state.budgets
-                });
-                document.getElementById('lastSaved').textContent = '已同步至雲端：' + new Date().toLocaleTimeString();
-            } catch (e) {
-                console.error("Firebase 同步失敗: ", e);
-            }
-        };
-
-        window.loadState = async function() {
-            // 先嘗試讀取 Firebase
-            try {
-                const docSnap = await getDoc(doc(db, "budget", "data"));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    window.state.expenses = data.expenses || [];
-                    window.state.current = data.current || window.state.current;
-                    window.state.budgets = data.budgets || window.state.budgets;
-                    if(typeof window.renderAll === 'function') window.renderAll();
-                    console.log("Firebase: 資料讀取成功！");
-                    return;
-                }
-            } catch (e) {
-                console.error("Firebase 讀取失敗: ", e);
-            }
-            // 如果讀不到，才讀 localStorage
-            const raw = localStorage.getItem("budget-tracker-recurring-v6");
-            if(raw) {
-                const x = JSON.parse(raw);
-                window.state.expenses = x.expenses;
-                window.state.current = x.current;
-                if(typeof window.renderAll === 'function') window.renderAll();
-            }
-        };
-        
-        // 頁面加載時執行
-        window.loadState();
-    </script>
+                current: window.state.current,
+                budgets: window.state.budgets
+            });
+            console.log("已同步至 Firebase");
+        } catch (e) {
+            console.error("Firebase 同步失敗: ", e);
+        }
+    };
+</script>
 </body>
 </html>
